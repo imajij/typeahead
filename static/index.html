@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>googol — search terminal</title>
+  <meta name="description" content="Googol: a search engine simulator with trie typeahead, typo repair, TF-IDF ranking and PageRank.">
+  <meta name="color-scheme" content="dark">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" rx="22" fill="%230a0f0c"/><text x="50" y="66" font-size="44" text-anchor="middle" fill="%233ddc84" font-family="monospace" font-weight="700">&gt;_</text></svg>'>
+  <link rel="stylesheet" href="search.css">
+</head>
+<body class="home">
+
+  <div class="backdrop" aria-hidden="true">
+    <i class="orb orb-green"></i>
+    <i class="orb orb-cyan"></i>
+    <i class="orb orb-violet"></i>
+  </div>
+
+  <nav class="topnav">
+    <a href="console.html" class="nav-link">[ engine console ]</a>
+  </nav>
+
+  <main class="stage">
+
+    <a class="brand" id="brand-home" href="/" aria-label="googol home">
+      <span class="l i1">g</span><span class="l i2">o</span><span class="l i3">o</span><span class="l i4">g</span><span class="l i5">o</span><span class="l i6">l</span><span class="caret" aria-hidden="true">_</span>
+    </a>
+    <p class="tagline">// ten to the power of one hundred results, give or take</p>
+
+    <div class="search-zone" id="search-zone">
+      <form class="searchbox" id="searchbox" role="search">
+        <span class="prompt" aria-hidden="true">&#10095;</span>
+        <input id="q" type="text" autocomplete="off" autocapitalize="off" spellcheck="false"
+               role="combobox" aria-expanded="false" aria-controls="suggest-list" aria-autocomplete="list"
+               aria-label="search googol" placeholder="query the index...">
+        <button type="button" class="clear-btn" id="clear-btn" aria-label="clear search" hidden>
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </form>
+      <div class="suggest-panel" id="suggest-panel" hidden>
+        <ul id="suggest-list" role="listbox" aria-label="search suggestions"></ul>
+      </div>
+    </div>
+
+    <div class="home-actions">
+      <button class="quiet-btn" id="btn-search">./search</button>
+      <button class="quiet-btn" id="btn-lucky">./lucky --random</button>
+    </div>
+
+    <section class="trending" aria-label="trending searches">
+      <h2 class="trending-title">~$ top --trending</h2>
+      <ul class="chips" id="trending-chips"></ul>
+    </section>
+
+    <section class="results-zone" aria-label="search results">
+      <div class="didyoumean" id="didyoumean" hidden></div>
+      <div class="results-meta" id="results-meta"></div>
+      <ol class="results" id="results"></ol>
+    </section>
+
+  </main>
+
+  <footer class="foot">
+    <span class="foot-tech"><span class="seg">trie typeahead</span><span class="seg">damerau&ndash;levenshtein repair</span><span class="seg">tf&ndash;idf &times; pagerank</span></span>
+    <span class="foot-links"><a href="console.html">engine console</a></span>
+  </footer>
+
+  <script src="search.js"></script>
+</body>
+</html>

@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Engine Console — Googol</title>
+  <meta name="description" content="Backend systems console: Web Indexing, PageRank Power Iterations, TF-IDF Search Ranking, and Typeahead autocomplete queues.">
+  <link rel="stylesheet" href="style.css">
+  <!-- FontAwesome for Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+  <!-- Top Header Navigation -->
+  <header>
+    <div class="logo-section">
+      <div class="logo-icon">
+        <i class="fa-solid fa-gears"></i>
+      </div>
+      <div class="logo-text">
+        <h1>Googol Engine Console</h1>
+        <p>Core Backend Systems Dashboard &middot; <a href="/" style="color: inherit;">&larr; back to search</a></p>
+      </div>
+    </div>
+    <div class="status-badge" id="engine-status">
+      <div class="status-dot"></div>
+      <span>ENGINE RUNNING</span>
+    </div>
+  </header>
+
+  <!-- Main Workstation Layout Grid -->
+  <main class="app-container">
+
+    <!-- LEFT PANEL: Search Ranker & Autocomplete -->
+    <section class="panel-section">
+
+      <!-- Query Console -->
+      <div class="glass-card">
+        <div class="card-title">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <h2>Search Ranker Console</h2>
+        </div>
+        <p class="section-desc">
+          Query the inverted index. Results are ranked live using TF-IDF and PageRank:
+          <code class="formula-block">Score = TF-IDF &times; (1.0 + 10.0 &times; PageRank)</code>
+        </p>
+
+        <div class="search-wrapper">
+          <div class="search-input-container">
+            <i class="fa-solid fa-magnifying-glass search-icon-left"></i>
+            <input
+              type="text"
+              id="search-input"
+              class="search-input"
+              placeholder="Search indexed pages..."
+              autocomplete="off"
+              spellcheck="false"
+            >
+            <button id="clear-btn" class="clear-btn" aria-label="Clear text">
+              <i class="fa-solid fa-xmark"></i>
+            </button>
+            <button id="btn-search" class="search-action-btn">Search</button>
+          </div>
+          <!-- Real-Time Autocomplete suggestions -->
+          <div id="suggestions-dropdown" class="autocomplete-dropdown"></div>
+        </div>
+
+        <!-- Ranked Results Display -->
+        <div class="results-display-container">
+          <div id="query-meta-count" class="meta-label">Enter a term to trigger search.</div>
+
+          <div id="results-list" class="results-list">
+            <!-- Dynamic search results populate here -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MIDDLE PANEL: Document Directory & Graph Listing -->
+    <section class="panel-section">
+
+      <!-- Ingestion Web Crawler -->
+      <div class="glass-card">
+        <div class="card-title">
+          <i class="fa-solid fa-spider"></i>
+          <h2>Crawler Ingest Simulator</h2>
+        </div>
+        <p class="section-desc">
+          Simulate a crawler finding a new page. Submitting builds the inverted index and recalculates PageRank across the entire web graph.
+        </p>
+
+        <form id="ingest-form" class="ingest-form">
+          <div class="form-group">
+            <label for="ingest-url">Page URL</label>
+            <input type="url" id="ingest-url" placeholder="https://example.com/topic" required>
+          </div>
+          <div class="form-group">
+            <label for="ingest-title">Page Title</label>
+            <input type="text" id="ingest-title" placeholder="Introduction to Systems" required>
+          </div>
+          <div class="form-group">
+            <label for="ingest-body">Page Content (Body text)</label>
+            <textarea id="ingest-body" rows="4" placeholder="Enter keywords and descriptions to populate the inverted index..." required></textarea>
+          </div>
+          <div class="form-group">
+            <label for="ingest-links">Outgoing Links (Comma-separated URLs)</label>
+            <input type="text" id="ingest-links" placeholder="https://rust-lang.org/intro, https://sqlite.org/about">
+          </div>
+          <button type="submit" id="btn-ingest-submit" class="btn btn-primary" style="width: 100%;">
+            <i class="fa-solid fa-arrow-up-from-bracket"></i> Crawl &amp; Index Document
+          </button>
+        </form>
+      </div>
+
+      <!-- Seed Quick Simulator -->
+      <div class="glass-card mt-card">
+        <div class="card-title">
+          <i class="fa-solid fa-traffic-light"></i>
+          <h2>Telemetry Simulations</h2>
+        </div>
+        <p class="section-desc">
+          Test autocomplete backpressure. Floods the Tokio channel queue with concurrent search queries.
+        </p>
+        <div class="sim-row">
+          <button id="btn-surge" class="btn btn-warning">
+            <i class="fa-solid fa-network-wired"></i> Traffic Surge (200 Queries)
+          </button>
+          <button id="btn-single-sim" class="btn btn-secondary">
+            <i class="fa-solid fa-paper-plane"></i> Single Search
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- RIGHT PANEL: PageRank Directory & System Stats -->
+    <section class="panel-section">
+
+      <!-- Telemetry Cards -->
+      <div class="stats-grid">
+        <div class="stat-card stat-db">
+          <div class="stat-label"><i class="fa-solid fa-database"></i> SQLite Rows</div>
+          <div id="stat-total-queries" class="stat-value">0</div>
+          <div class="stat-subtitle">Unique query log counts</div>
+        </div>
+        <div class="stat-card stat-trie">
+          <div class="stat-label"><i class="fa-solid fa-file-shield"></i> Indexed Docs</div>
+          <div id="stat-total-docs" class="stat-value">0</div>
+          <div class="stat-subtitle">crawled pages registry</div>
+        </div>
+        <div class="stat-card stat-queue">
+          <div class="stat-label"><i class="fa-solid fa-buffer"></i> Write Queue</div>
+          <div id="stat-queue-size" class="stat-value">0</div>
+          <div class="queue-progress">
+            <div id="queue-progress-bar" class="queue-progress-bar"></div>
+          </div>
+          <div class="stat-subtitle">Buffered counts to SQLite</div>
+        </div>
+        <div class="stat-card stat-size">
+          <div class="stat-label"><i class="fa-solid fa-diagram-project"></i> Trie Nodes</div>
+          <div id="stat-trie-nodes" class="stat-value">0</div>
+          <div class="stat-subtitle">Active prefix nodes</div>
+        </div>
+      </div>
+
+      <!-- Indexed Web Graph Directory (PageRank weights) -->
+      <div class="glass-card mt-card">
+        <div class="card-title">
+          <i class="fa-solid fa-diagram-project"></i>
+          <h2>PageRank Graph Directory</h2>
+        </div>
+        <p class="section-desc">
+          Current documents in the index, sorted by PageRank authority scores.
+        </p>
+        <div class="table-container">
+          <table class="graph-table">
+            <thead>
+              <tr>
+                <th>Page Title &amp; URL</th>
+                <th>PageRank</th>
+              </tr>
+            </thead>
+            <tbody id="document-graph-rows">
+              <tr>
+                <td colspan="2" style="text-align: center; color: var(--text-secondary);">Loading graph...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Live Engine Terminal Logs -->
+      <div class="glass-card mt-card console-card">
+        <div class="card-title">
+          <i class="fa-solid fa-terminal"></i>
+          <h2>Engine Live Logs</h2>
+        </div>
+        <div id="console-terminal" class="console-terminal">
+          <div class="console-line"><span class="timestamp">[00:00:00]</span> <span class="event">Console terminal initialized. Ready.</span></div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Client Script -->
+  <script src="app.js"></script>
+</body>
+</html>
